@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
-const router = express.Router();
 const port = process.env.PORT || 3000;
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const foodsRouter = require('./src/routes/foods.js');
 
 app.disable('x-powered-by');
 if (process.env.NODE_ENV === 'developer') app.use(morgan('dev'))
 app.use(bodyParser.json());
+
+app.use('/foods', foodsRouter);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
