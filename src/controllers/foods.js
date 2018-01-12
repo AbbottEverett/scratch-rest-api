@@ -26,7 +26,11 @@ function create (req, res, next) {
 }
 
 function update (req, res, next) {
-  res.send('test');
+  const data = model.update(req.params.id, req.body);
+  if (data.errors) {
+    return next({ status: 400, message: `Could not update food at id: ${req.params.id}`, errors: data.errors });
+  }
+  res.status(200).json({ data });
 }
 
 function remove (req, res, next) {

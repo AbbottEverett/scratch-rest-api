@@ -10,29 +10,25 @@ function getAll() {
 }
 
 function getOne(id) {
-  let response;
+  let response = foods.filter(food => food.id === id)[0];
   let errors = []
-  for (let food of foods) {
-    if (food.id === id) response = food;
-  }
+
   if (!response) {
     errors.push('Please make sure id is inputted correctly');
     response = { errors };
   }
+
   return response;
 }
 
 function create (input) {
-  const name = input.name;
-  const isTasty = input.isTasty;
-  const errors = [];
+  const errors = validateParams(input, []);
   let response;
 
-  if (!name || isTasty === undefined) {
-    errors.push('Please include a name and taste preference');
+  if (errors.length > 0) {
     response = { errors };
   } else {
-    const food = { id: uuid(), name, isTasty }
+    const food = { id: uuid(), name: input.name, isTasty: input.isTasty };
     foods.push(food);
     response = food;
   }
@@ -40,4 +36,32 @@ function create (input) {
   return response;
 }
 
-module.exports = { getAll, getOne, create };
+function update (id, input) {
+  const data = foods.filter(food => food.id === id)[0];
+  let errors = validateParams(input, []);
+  let response;
+
+  if (!data) {
+    errors.push('Please make sure id is inputted correctly');
+  }
+  
+  if (errors.length > 0) {
+    response = { errors };
+  } else {
+    data.name = input.name;
+    data.isTasty = input.isTasty;
+    response = { data };
+  }
+
+  return response;
+}
+
+function validateParams(input, array) {
+  if (!input.name || input.isTasty === undefined) {
+    const msg = 'Please include a name and taste preference';
+    array.push(msg);
+  }
+  return array;
+}
+
+module.exports = { getAll, getOne, create, update };
