@@ -10,8 +10,8 @@ function getAll() {
 }
 
 function getOne(id) {
-  let response = foods.filter(food => food.id === id)[0];
-  let errors = []
+  let response = getItemById(id, foods);
+  let errors = [];
 
   if (!response) {
     errors.push('Please make sure id is inputted correctly');
@@ -37,7 +37,7 @@ function create (input) {
 }
 
 function update (id, input) {
-  const data = foods.filter(food => food.id === id)[0];
+  const data = getItemById(id, foods);
   let errors = validateParams(input, []);
   let response;
 
@@ -57,12 +57,10 @@ function update (id, input) {
 }
 
 function remove (id) {
-  const data = foods.filter(food => food.id === id)[0];
+  const data = getItemById(id, foods);
   let errors = [];
   const index = foods.indexOf(data);
   let response;
-  console.log(data);
-  console.log(index);
 
   if (!data) {
     errors.push('Please make sure id is inputted correctly');
@@ -76,6 +74,10 @@ function remove (id) {
   }
 
   return response;
+}
+
+function getItemById(id, array) {
+  return array.find(item => item.id === id);
 }
 
 function validateParams(input, array) {
