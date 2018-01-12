@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const foodsRouter = require('./src/routes/foods.js');
+const foodsRouter = require('./src/routes/foods');
 
 app.disable('x-powered-by');
 if (process.env.NODE_ENV === 'developer') app.use(morgan('dev'))

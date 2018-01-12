@@ -1,5 +1,5 @@
 const express = require('express');
-const model = require('../models/foods.js');
+const model = require('../models/foods');
 
 // Controller is for returning data, sending status codes
 // and managing error handing
@@ -34,7 +34,13 @@ function update (req, res, next) {
 }
 
 function remove (req, res, next) {
-  res.send('test');
+  const data = model.remove(req.params.id);
+
+  if (data.errors) {
+    return next({ status: 400, message: `Could not update food at id: ${req.params.id}`, errors: data.errors });
+  }
+
+  res.status(200).json({ data });
 }
 
 module.exports = { getAll, getOne, create, update, remove };

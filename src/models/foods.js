@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const shortid = require('shortid');
 
 const foods = [];
 
@@ -28,7 +28,7 @@ function create (input) {
   if (errors.length > 0) {
     response = { errors };
   } else {
-    const food = { id: uuid(), name: input.name, isTasty: input.isTasty };
+    const food = { id: shortid.generate(), name: input.name, isTasty: input.isTasty };
     foods.push(food);
     response = food;
   }
@@ -44,13 +44,35 @@ function update (id, input) {
   if (!data) {
     errors.push('Please make sure id is inputted correctly');
   }
-  
+
   if (errors.length > 0) {
     response = { errors };
   } else {
     data.name = input.name;
     data.isTasty = input.isTasty;
     response = { data };
+  }
+
+  return response;
+}
+
+function remove (id) {
+  const data = foods.filter(food => food.id === id)[0];
+  let errors = [];
+  const index = foods.indexOf(data);
+  let response;
+  console.log(data);
+  console.log(index);
+
+  if (!data) {
+    errors.push('Please make sure id is inputted correctly');
+  }
+
+  if (errors.length > 0) {
+    response = { errors };
+  } else {
+    response = { data };
+    foods.splice(index, 1);
   }
 
   return response;
@@ -64,4 +86,4 @@ function validateParams(input, array) {
   return array;
 }
 
-module.exports = { getAll, getOne, create, update };
+module.exports = { getAll, getOne, create, update, remove };
